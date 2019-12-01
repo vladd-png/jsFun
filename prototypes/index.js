@@ -26,10 +26,11 @@ const kittyPrompts = {
     let orangeKits = kitties.filter(kitty => {
       return kitty.color === 'orange';
     });
-    let orangeNames = (orangeKits => {
-      return kitty.name;
+
+    let orangeNames = [];
+    orangeKits.forEach(kitty => {
+      return orangeNames.push(kitty.name);
     });
-    console.log(orangeNames);
     // let orangeNames = orangeKits.name;
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
@@ -37,17 +38,26 @@ const kittyPrompts = {
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // In the first function orangeKits we filter over the array of Kitties,
+    // holding 4 kitty objects. We find the kitties that match our conditional
+    // color === 'orange' and return a new array of the two objects that
+    // match. Next we filter over the new array and forEach element in there
+    // we push the kitty.name into an array and return only the name.
   },
 
   sortByAge() {
     // Sort the kitties by their age
+    let orderKitAge = kitties.sort((a,b) => a.age < b.age ? 1 : -1);
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = orderKitAge;
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // When we use sort() we give it two parameters a and b
+    // we compare a.age to b.age (or the kitty age once we pass in
+    // as the argument) and if age a < b we return 1, which gives
+    // precedence in the array to that object, else we return -1
+    // which does the opposite
   },
 
   growUp() {
@@ -64,7 +74,11 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let grownKitts = kitties.map(kitty => {
+      return kitty.age += 2;
+    });
+
+    const result = kitties;
     return result;
   }
 };
@@ -95,8 +109,20 @@ const clubPrompts = {
     //   Pam: ['Drama', 'Art', 'Chess'],
     //   ...etc
     // }
+    //create keys with the name of the member
+    //sort their clubs into an array with their name
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let sortMember = clubs.reduce((acc, club) => {
+      club.members.forEach(member => {
+        if (!acc[member]) {
+          acc[member] = [];
+        }
+        acc[member].push(club.club);
+      });
+      return acc;
+    }, {});
+
+    const result = sortMember;
     return result;
 
     // Annotation:
@@ -131,12 +157,31 @@ const modPrompts = {
     //   { mod: 3, studentsPerInstructor: 10 },
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
+    let total, totalPerInstructor;
+    let classList = [];
+    let studentMath = mods.forEach(mod => {
+      total = (mod.students / mod.instructors);
+      totalPerInstructor = {
+        'mod': mod.mod,
+        'studentsPerInstructor': total
+      };
+      classList.push(totalPerInstructor);
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classList;
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //For the solution we have to start by looping
+    //over the array of objects and creating a new
+    //variable with the value of the students
+    //divided by the instructors for each object.
+    //Then we create a new object with the new key studentsPerInstructor
+    //and assign it to the new variable.
+    //Finally it wants an array so we push each of those new
+    //objects into an array and return the whole array.
+    //This all happens within thw forEach because the value
+    //for total changes with each object
   }
 };
 
@@ -167,11 +212,33 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    // let cakeList = [];
+    // let stockPerCake = cakes.forEach(cake => {
+    //   let cakeVariety = {
+    //     "flavor": cake.cakeFlavor,
+    //     "inStock": cake.inStock
+    //   }
+    //   cakeList.push(cakeVariety);
+    // });
+
+    let stockCake = cakes.reduce((accumulator, cake) => {
+      let cakeVariety = {
+        'flavor': cake.cakeFlavor,
+        'inStock': cake.inStock
+      };
+      accumulator.push(cakeVariety);
+      return accumulator;
+    }, []);
+
+    const result = stockCake;
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // A forEach method loops over every object in the cake array.
+    //It creates a new object for each cake with the values of cakeFlavor
+    //and cakeInstock count.
+    //Next we push each new object into an array and return the array.
+    //update: reformatted to reduce with an array accumulator.
   },
 
   onlyInStock() {
@@ -195,22 +262,40 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let availableCakes = cakes.filter(cake => {
+      return cake.inStock >= 1;
+    });
+
+    const result = availableCakes;
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //Using filter, I find all the cakes with an inStock
+    //value greater than or equal to 1. I return only the
+    //cake objects that meet that condition.
+
   },
 
   totalInventory() {
     // Return the total amount of cakes in stock e.g.
     // 59
+    let total = 0;
+    let availableCakes = cakes.filter(cake => {
+      total = cake.inStock + total;
+      return total;
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+
+
+    const result = total;
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //I use filter to iterate over each cake object
+    //in the cakes array, and take the inStock value
+    //and assign it to total, and then add it again and
+    //reassign total, until it goes through all the elements.
+    //Then return total amount
   },
 
   allToppings() {
@@ -218,11 +303,24 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let allToppings = cakes.reduce((acc, cake) => {
+      cake.toppings.forEach(topping => {
+        if(!acc.includes(topping)) {
+          acc.push(topping);
+        }
+      });
+      return acc;
+    }, []);
+
+
+    const result = allToppings;
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //First check through the toppings array on each cake
+    //and using the conditional see if the acc already contains that
+    //topping, and if not push it into the array created with reduce
+
   },
 
   groceryList() {
@@ -236,11 +334,27 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let groceryList = cakes.reduce((acc, cake) => {
+      cake.toppings.forEach(topping => {
+        if(!acc[topping]) {
+          acc[topping] = 0;
+        }
+        acc[topping]++;
+      });
+      return acc;
+    }, {});
+
+
+    const result = groceryList;
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //When going through the cakes array of objects and
+    //looking at the key toppings. Check first if the acc
+    //object already contains a key with the name of that
+    //topping, if not create it and assign it to 0.
+    //Then always increase the number and reassin it by 1
+    //for each time the topping shows up.
   }
 };
 
@@ -271,7 +385,11 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let sortFE = classrooms.filter(classroom => {
+      return classroom.program === 'FE';
+    });
+
+    const result = sortFE;
     return result;
 
     // Annotation:
@@ -286,7 +404,17 @@ const classPrompts = {
     //   beCapacity: 96
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let totalCapacity = classrooms.reduce((acc, program) => {
+      // classroom.forEach(program => {
+      if(!acc[program]) {
+        acc[program] = 0;
+      }
+      acc = acc[program] + acc;
+      console.log(acc);
+      return acc;
+    }, {});
+
+    const result = totalCapacity;
     return result;
 
     // Annotation:
@@ -370,7 +498,7 @@ const nationalParksPrompts = {
     // Annotation:
     // Write your annotation here as a comment
   }
-}
+};
 
 
 
