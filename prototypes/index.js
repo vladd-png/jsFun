@@ -403,14 +403,17 @@ const classPrompts = {
     //   feCapacity: 110,
     //   beCapacity: 96
     // }
+    let feCapacity = 0;
+    let beCapacity = 0;
 
-    let totalCapacity = classrooms.reduce((acc, program) => {
-      // classroom.forEach(program => {
-      if(!acc[program]) {
-        acc[program] = 0;
+    let totalCapacity = classrooms.reduce((acc, classroom) => {
+      if(classroom.program === 'BE') {
+        beCapacity += classroom.capacity;
+        acc['beCapacity'] = beCapacity;
+      } else if (classroom.program === 'FE') {
+        feCapacity += classroom.capacity;
+        acc['feCapacity'] = feCapacity;
       }
-      acc = acc[program] + acc;
-      console.log(acc);
       return acc;
     }, {});
 
@@ -424,7 +427,11 @@ const classPrompts = {
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let classroomCapacity = classrooms.sort((a, b) => {
+      return a.capacity - b.capacity;
+    });
+
+    const result = classroomCapacity;
     return result;
 
     // Annotation:
@@ -451,19 +458,21 @@ const nationalParksPrompts = {
     //   parksToVisit: ["Yellowstone", "Glacier", "Everglades"],
     //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
     //}
+    let visited = [];
+    let toVisit = [];
     let sortParks = nationalParks.reduce((acc, park) => {
-      let visited = [];
-      let toVisit = [];
       if (park.visited) {
-        parksToVisit.push(park.location);
+        visited.push(park.name);
       } else if (!park.visited) {
-        visited.push(park.location);
+        toVisit.push(park.name);
       }
+      // acc['parksToVisit'] = toVisit;
+      // acc['parksVisited'] = visited;
+      //both ways work
       acc = {
         'parksToVisit': toVisit,
         'parksVisited': visited
       };
-      console.log(toVisit);
       return acc;
     }, {});
 
@@ -483,8 +492,18 @@ const nationalParksPrompts = {
     // { Utah: 'Zion' },
     // { Florida: 'Everglades' } ]
 
+    function getParkState() {
+      return nationalParks.reduce((acc, park) => {
+        parkObject = {
+          [park.location]: park.name
+        }
+        acc.push(parkObject)
+        return acc;
+      }, [])
+    }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+
+    const result = getParkState();
     return result;
 
     // Annotation:
