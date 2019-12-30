@@ -14,7 +14,7 @@ const nationalParks = [
     name: "Yellowstone",
     visited: false,
     location: "Wyoming",
-     activities: [
+    activities: [
       "hiking",
       "boating",
       "watching wildlife",
