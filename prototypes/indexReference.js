@@ -496,10 +496,10 @@ const nationalParksPrompts = {
       return nationalParks.reduce((acc, park) => {
         parkObject = {
           [park.location]: park.name
-        }
-        acc.push(parkObject)
+        };
+        acc.push(parkObject);
         return acc;
-      }, [])
+      }, []);
     }
 
 
@@ -526,7 +526,18 @@ const nationalParksPrompts = {
     //   'backpacking',
     //   'rock climbing' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    function findActivities() {
+      return nationalParks.reduce((acc, park) => {
+        park.activities.filter(activity => {
+          if (!acc.includes(activity)) {
+            acc.push(activity);
+          }
+        });
+        return acc;
+      }, []);
+    }
+
+    const result = findActivities();
     return result;
 
     // Annotation:
@@ -553,7 +564,15 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    function getTotalBeer() {
+      let total= 0;
+      breweries.forEach(brewery => {
+        total += brewery.beers.length;
+      });
+      return total;
+    }
+
+    const result = getTotalBeer();
     return result;
 
     // Annotation:
@@ -568,8 +587,18 @@ const breweryPrompts = {
     //  { name: 'Ratio Beerworks', beerCount: 5},
     // ...etc.
     // ]
+    function countBeers() {
+      return breweries.reduce((acc, brewery) => {
+        beerObject = {
+          'name': brewery.name,
+          'beerCount': brewery.beers.length
+        };
+        acc.push(beerObject);
+        return acc;
+      }, []);
+    }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = countBeers();
     return result;
 
     // Annotation:
@@ -581,7 +610,27 @@ const breweryPrompts = {
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    function sortBeerAbv() {
+      let highestABV = [];
+      // let beerArray = [];
+      breweries.forEach(brewery => {
+        brewery.beers.forEach(beer => {
+          highestABV.push(beer.abv);
+          highestABV.sort((a, b) => b - a);
+          if(beer.abv === highestABV[0]) {
+            beerObject = {
+              'name': beer.name,
+              'type': beer.type,
+              'abv': beer.abv,
+              'ibu': beer.ibu
+            };
+          }
+        });
+      });
+      return beerObject;
+    }
+
+    const result = sortBeerAbv();
     return result;
 
     // Annotation:
@@ -629,7 +678,33 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    function getStudents() {
+      return cohorts.filter(cohort => {
+        // console.log(instructors.module)
+        // console.log(cohort.module => cohort.studentCount)
+        if (cohort.module === instructors.module) {
+          // instrObj = {
+          //   name: instructor.name,
+          //   studentCount:
+            return cohort.studentCount
+          // }
+          // return instrObj;
+        }
+      });
+    }
+
+    function countStudents() {
+      instructors.reduce((acc, instructor) => {
+        // let teacherObj = {
+        //   name: instructor.name,
+        //   studentCount:
+        // }
+        return acc;
+      }, []);
+    }
+
+
+    const result = countStudents();
     return result;
 
     // Annotation:
@@ -642,6 +717,8 @@ const turingPrompts = {
     // cohort1806: 9,
     // cohort1804: 10.5
     // }
+
+
 
     const result = 'REPLACE WITH YOUR RESULT HERE';
     return result;
@@ -717,7 +794,21 @@ const bossPrompts = {
     //   { bossName: 'Scar', sidekickLoyalty: 16 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    function sumSidekicks() {
+      let bossName = Object.keys(bosses);
+      return bossName.reduce((acc, boss) => {
+        let bossObj = {
+          bossName: boss,
+          sidekickLoyalty: 0
+        }
+        if(boss === sidekicks.boss) {
+          sidekickLoyalty += sidekicks.loyaltyToBoss;
+        }
+        acc.push(bossObj);
+      }, [])
+    }
+
+    const result = sumSidekicks();
     return result;
 
     // Annotation:
